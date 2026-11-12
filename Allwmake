@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+cd "$(dirname "$0")"
+: "${WM_PROJECT_DIR:?Source the OpenFOAM environment first.}"
+RC_NANO_SOURCE="${RC_NANO_SOURCE:-$PWD/../reactingChargedNanoParcelFoam}"
+if [ ! -d "$RC_NANO_SOURCE/lagrangian" ]; then
+    echo "Set RC_NANO_SOURCE to the reactingChargedNanoParcelFoam solver source directory." >&2
+    exit 1
+fi
+export RC_NANO_SOURCE
+wmake

@@ -1,0 +1,214 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           | OpenCFD v2406 / v2412 / v2506                    |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      foam.dat;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Gas-phase NASA-7 thermodynamics retained from the supplied reference data.
+// These entries are NOT identical constant-Cp surrogate gases.
+//
+// OpenFOAM Sutherland form: mu = As*T^(3/2)/(T + Ts), mu in Pa s.
+// N2/O2: relative-least-squares fits to zero-density viscosity, Lemmon and
+// Jacobsen (2004), DOI: 10.1023/B:IJOT.0000022327.04529.f3, Eq. 2, Tables I/II.
+// H2O: fit to Huber et al. (2009), DOI: 10.1063/1.3088050, Eq. 11, Table 2.
+// These As/Ts are THIS PROJECT'S fits, not coefficients tabulated in the papers.
+// Fit interval: 300-600 K. Maximum errors relative to source correlations:
+// N2 0.199%, O2 0.199%, H2O 2.385%. Outside this interval is extrapolation,
+// even when the thermodynamic polynomial permits a wider temperature range.
+// See docs/transportProperties.md and its reproducible fitting script.
+//
+// DEG: retain the supplied NASA-7 conversion and Sutherland fit to Yaws
+// (Transport Properties of Chemicals and Hydrocarbons, 2nd ed., 2014).
+// DEG As/Ts fit interval: 306.64-1000 K; not independently refitted here.
+// DEG Cp conversion references Levin et al. (2024), DOI: 10.1002/prs.12557.
+// The carrier species list is chosen separately in foam.inp. Unused property
+// entries do not create gas species. Air, when needed, should be a specified
+// N2/O2 mixture rather than a renamed copy of nitrogen.
+
+N2
+{
+    specie
+    {
+        molWeight       28.0134;
+    }
+
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+
+        highCpCoeffs
+        (
+            2.92664
+            0.00148798
+            -5.68476e-07
+            1.0097e-10
+            -6.75335e-15
+            -922.798
+            5.98053
+        );
+
+        lowCpCoeffs
+        (
+            3.29868
+            0.00140824
+            -3.96322e-06
+            5.64152e-09
+            -2.44486e-12
+            -1020.9
+            3.95037
+        );
+
+    }
+
+    transport
+    {
+        As              1.4525113378005e-06;
+        Ts              123.027512608955;
+    }
+}
+
+O2
+{
+    specie
+    {
+        molWeight       31.9988;
+    }
+
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+
+        highCpCoeffs
+        (
+            3.69758
+            0.00061352
+            -1.25884e-07
+            1.77528e-11
+            -1.13644e-15
+            -1233.93
+            3.18917
+        );
+
+        lowCpCoeffs
+        (
+            3.21294
+            0.00112749
+            -5.75615e-07
+            1.31388e-09
+            -8.76855e-13
+            -1005.25
+            6.03474
+        );
+
+    }
+
+    transport
+    {
+        As              1.74762288767855e-06;
+        Ts              141.03939217023;
+    }
+}
+
+H2O
+{
+    specie
+    {
+        molWeight       18.0153;
+    }
+
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+
+        highCpCoeffs
+        (
+            2.67215
+            0.00305629
+            -8.73026e-07
+            1.201e-10
+            -6.39162e-15
+            -29899.2
+            6.86282
+        );
+
+        lowCpCoeffs
+        (
+            3.38684
+            0.00347498
+            -6.3547e-06
+            6.96858e-09
+            -2.50659e-12
+            -30208.1
+            2.59023
+        );
+
+    }
+
+    transport
+    {
+        As              2.02193323384903e-06;
+        Ts              801.806493269838;
+    }
+}
+
+DEG
+{
+    specie
+    {
+        molWeight       106.1204;
+    }
+
+    thermodynamics
+    {
+        Tlow            250;
+        Thigh           1000;
+        Tcommon         500;
+
+        highCpCoeffs
+        (
+            1.216398349
+            6.057358479e-02
+            -3.757657999e-05
+            1.054163402e-08
+            -9.617695080e-13
+            -6.846018129e+04
+            2.951661880e+01
+        );
+
+        lowCpCoeffs
+        (
+            1.216398349
+            6.057358479e-02
+            -3.757657999e-05
+            1.054163402e-08
+            -9.617695080e-13
+            -6.846018129e+04
+            2.951661880e+01
+        );
+
+    }
+
+    transport
+    {
+        As              8.38851e-07;
+        Ts              451.903;
+    }
+}
+
+// ************************************************************************* //

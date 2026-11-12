@@ -1,0 +1,8 @@
+Make/*/
+*.o
+*.dep
+log.*
+tutorials/*/0.*/
+tutorials/*/processor*/
+tutorials/*/postProcessing/
+tutorials/*/constant/polyMesh/

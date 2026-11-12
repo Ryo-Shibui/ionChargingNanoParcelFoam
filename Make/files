@@ -1,0 +1,6 @@
+ionChargingNanoParcelFoam.C
+Reference/charging.c
+Reference/constants.c
+Reference/util.c
+
+EXE = $(FOAM_USER_APPBIN)/ionChargingNanoParcelFoam

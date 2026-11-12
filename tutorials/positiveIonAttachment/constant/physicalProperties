@@ -1,0 +1,4 @@
+FoamFile {version 2.0; format ascii; class dictionary; object physicalProperties;}
+T [0 0 0 1 0 0 0] 298.15;
+muP [-1 0 2 0 0 1 0] 1.79e-4;
+muN [-1 0 2 0 0 1 0] 2.08e-4;

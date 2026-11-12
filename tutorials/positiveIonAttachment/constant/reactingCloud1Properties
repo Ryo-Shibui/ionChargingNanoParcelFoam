@@ -1,0 +1,200 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           | OpenCFD v2406 / v2412 / v2506                    |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      reactingCloud1Properties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solution
+{
+    active                  true;
+    coupled                 no;
+    transient               yes;
+    cellValueSourceCorrection no;
+    maxCo                   0.3;
+    sourceTerms
+    {
+        schemes
+        {
+            rho                     explicit 1;
+            U                       explicit 1;
+            Yi                      explicit 1;
+            h                       explicit 1;
+            radiation               explicit 1;
+        }
+
+    }
+
+    interpolationSchemes
+    {
+        rho                     cell;
+        U                       cellPoint;
+        E                       cell;
+        thermo:mu               cell;
+        mu                      cell;
+        T                       cell;
+        Cp                      cell;
+        kappa                   cell;
+        p                       cell;
+    }
+
+    integrationSchemes
+    {
+        U                       analytical;
+        T                       analytical;
+    }
+
+}
+
+constantProperties
+{
+    qmax 3;
+    epsilonR 5.9;
+    qmin -3;
+    parcelTypeId            -1;
+    rhoMin                  1e-15;
+    rho0                    1000;
+    T0                      320;
+    TMin                    200;
+    TMax                    5000;
+    Cp0                     850;
+    epsilon0                0;
+    f0                      0;
+    pMin                    1000;
+    minParcelMass           1e-30;
+    volumeUpdateMethod      constantRho;
+    TDevol                  1e30;
+    LDevol                  0;
+    hRetentionCoeff         0;
+    lockParcelDiameterSet   false;
+    lockParcelDiameter      0;
+}
+
+subModels
+{
+    particleForces
+    {
+        nanoStokesDrag
+        {
+            lambda                  6.5e-8;
+        }
+
+        CoulombSep
+        {
+            E                       E;
+        }
+
+    }
+
+    injectionModels
+    {
+        centreParticle
+        {
+            type                    manualInjection;
+            positionsFile           particlePositions;
+            SOI                     0;
+            parcelBasisType         fixed;
+            nParticle               1;
+            massTotal               0;
+            U0                      (0 0 0);
+            parcelCharge            0;
+            sizeDistribution
+            {
+                type                    fixedValue;
+                fixedValueDistribution
+                {
+                    value                   1e-8;
+                }
+
+            }
+
+        }
+
+    }
+
+    dispersionModel         none;
+    patchInteractionModel   localInteraction;
+    chemicalReactionModel   none;
+    collisionModel          none;
+    heatTransferModel       none;
+    compositionModel        singleMixtureFraction;
+    phaseChangeModel        none;
+    devolatilisationModel   none;
+    surfaceReactionModel    none;
+    stochasticCollisionModel none;
+    radiationModel          none;
+    surfaceFilmModel        none;
+    radiation               off;
+    localInteractionCoeffs
+    {
+        patches
+        (
+            inlet
+            {
+                type                    escape;
+            }
+
+            outlet
+            {
+                type                    escape;
+            }
+
+            lowerElectrode
+            {
+                type                    stick;
+            }
+
+            upperElectrode
+            {
+                type                    stick;
+            }
+
+            "(front|back)"
+            {
+                type                    rebound;
+                e                       1;
+                mu                      0;
+            }
+
+        );
+    }
+
+    singleMixtureFractionCoeffs
+    {
+        phases
+        (
+            gas
+            {
+            }
+
+            liquid
+            {
+            }
+
+            solid
+            {
+                NaCl                    1;
+            }
+
+        );
+        YGasTot0                0;
+        YLiquidTot0             0;
+        YSolidTot0              1;
+    }
+
+}
+
+cloudFunctions
+{
+}
+
+// ************************************************************************* //

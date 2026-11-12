@@ -1,0 +1,37 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           | OpenCFD v2406 / v2412 / v2506                    |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application             ionChargingNanoParcelFoam;
+carrierFieldTime        "0";
+startFrom               startTime;
+startTime               0;
+stopAt                  endTime;
+endTime                 0.0005;
+deltaT                  1e-6;
+writeControl            timeStep;
+writeInterval           100;
+purgeWrite              0;
+writeFormat             ascii;
+writePrecision          12;
+writeCompression        off;
+timeFormat              general;
+timePrecision           10;
+runTimeModifiable       false;
+adjustTimeStep          no;
+maxCo                   0.5;
+maxDi                   10;
+
+// ************************************************************************* //

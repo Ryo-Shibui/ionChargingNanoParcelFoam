@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           | OpenCFD v2406 / v2412 / v2506                    |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "(phiE|phiEFinal)"
+    {
+        solver                  PCG;
+        preconditioner          DIC;
+        tolerance               1e-12;
+        relTol                  0;
+    }
+
+    "(rho|rhoFinal)"
+    {
+        solver                  diagonal;
+    }
+
+    "(p_rgh|p_rghFinal|p|pFinal)"
+    {
+        solver                  PCG;
+        preconditioner          DIC;
+        tolerance               1e-11;
+        relTol                  0;
+    }
+
+    "(U|UFinal|h|hFinal|e|eFinal|Yi|YiFinal|N2|DEG|H2O|T|TFinal)"
+    {
+        solver                  PBiCGStab;
+        preconditioner          DILU;
+        tolerance               1e-12;
+        relTol                  0;
+    }
+
+}
+
+PIMPLE
+{
+    solveEnergy             false;
+    solveElectrostatics     false;
+    solveFlow               false;
+    solveSpecies            false;
+    solveParcels            true;
+    nOuterCorrectors        1;
+    nCorrectors             1;
+    nNonOrthogonalCorrectors 0;
+    momentumPredictor       yes;
+    correctPhi              no;
+    pRefCell                0;
+    pRefValue               101325;
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p_rgh                   1;
+        phiE                    1;
+    }
+
+    equations
+    {
+        ".*"                    1;
+    }
+
+}
+
+// ************************************************************************* //
